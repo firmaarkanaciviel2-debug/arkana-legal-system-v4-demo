@@ -1,6 +1,6 @@
 # Arkana Civiel Legal Management — V5
 
-WordPress-centered foundation for the Arkana Civiel Legal Management System.
+WordPress-centered Legal Management System for Arkana Civiel.
 
 ## Goal
 
@@ -16,31 +16,51 @@ Turn the existing Arkana Civiel public WordPress site into one platform with:
 - retainer management;
 - audit/security controls.
 
-## Current foundation: V5.0.0-alpha.1
+## V5.1 Data Model & Relationships
 
-The plugin currently provides:
+The foundation now includes seven WordPress-native operational objects:
 
-- Custom Post Types: Clients, Matters, Legal Requests, Tasks, Deadlines, Documents, Retainers.
-- Custom roles: Managing Partner, Partner, Lawyer, Paralegal, Finance, Client Admin, Client User.
-- WordPress admin menu: **Legal Management**.
-- Initial dashboard metrics.
-- REST visibility for registered objects, ready for later portal/API work.
+- `ac_client` — Klien
+- `ac_matter` — Perkara
+- `ac_request` — Permintaan Hukum
+- `ac_task` — Tugas
+- `ac_deadline` — Deadline
+- `ac_document` — Dokumen
+- `ac_retainer` — Retainer
 
-## Install for development
+Core relationship model:
 
-1. Zip the `arkana-civiel-legal-management` directory.
-2. In WordPress: **Plugins → Add New Plugin → Upload Plugin**.
-3. Activate the plugin.
+```text
+Client
+ ├── Matter
+ │    ├── Legal Request
+ │    ├── Task
+ │    ├── Deadline
+ │    └── Document
+ └── Retainer
+```
+
+Matter also supports Partner and Lead Lawyer assignment. Tasks can have an assignee. Documents carry an access-level field that will become the basis for private document authorization in V5.9.
+
+Relationships are currently stored as sanitized WordPress post meta IDs. This keeps the first version portable and easy to back up while we validate the workflow locally.
+
+## Local installation
+
+1. Create/open your WordPress Local site.
+2. Copy `wordpress-plugin/arkana-civiel-legal-management/` into `wp-content/plugins/` or zip the plugin folder.
+3. Activate **Arkana Civiel Legal Management** from **Plugins**.
 4. Open **Legal Management** in the WordPress admin menu.
+5. Create test users for the internal roles and create test Clients/Matter records.
+6. Verify the **Arkana Civiel — Data & Relasi V5.1** meta box appears on each module.
 
 ## Important production rule
 
-This alpha does **not** yet implement private document delivery, matter-level authorization, audit logging, encryption/key management, client-to-matter isolation, or production-grade notifications. Those controls must be completed before sensitive client or litigation documents are stored in the system.
+This alpha does **not** yet implement private document delivery, matter-level authorization, audit logging, encryption/key management, client-to-matter isolation, or production-grade notifications. Do not store real client or litigation documents until those controls are completed and security-tested.
 
 ## V5 roadmap
 
-- V5.0 Foundation
-- V5.1 Data model and relations
+- V5.0 Foundation — complete
+- V5.1 Data model and relations — foundation complete
 - V5.2 Role and permission matrix
 - V5.3 Managing Partner dashboard
 - V5.4 Lawyer dashboard
